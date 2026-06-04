@@ -50,10 +50,23 @@ git submodule update --remote
    ```
 
 3. **cron 등록 (10분마다 자동 sync)**
+   
+   > ⚠️ **경로 주의**: crontab은 `~`(물결표시)를 항상 올바르게 해석하지 못함. 반드시 **절대경로**로 쓸 것.
+   
    ```bash
-   crontab -e
-   */10 * * * * ~/Documents/Obsidian\ Vault/hermes-wiki-super/sync.sh >> ~/Documents/Obsidian\ Vault/hermes-wiki-super/sync.log 2>&1
+   # 등록
+   (crontab -l 2>/dev/null; echo "*/10 * * * * /ABSOLUTE/PATH/hermes-wiki-super/sync.sh >> /ABSOLUTE/PATH/hermes-wiki-super/sync.log 2>&1") | crontab -
+   
+   # 확인
+   crontab -l
    ```
+   
+   **예시** (맥 사용자 sanghee):
+   ```bash
+   (crontab -l 2>/dev/null; echo "*/10 * * * * /Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super/sync.sh >> /Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super/sync.log 2>&1") | crontab -
+   ```
+   
+   > `*/10`이 zsh에서 glob 오류 나는 경우 — 위처럼 큰따옴표로 감싸면 정상 동작.
 
 4. **Obsidian Git 플러그인**
    - 설치: 커뮤니티 플러그인 → "Obsidian Git"
