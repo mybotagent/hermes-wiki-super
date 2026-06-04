@@ -3,7 +3,9 @@
 # sync.sh — hermes-wiki-super 양방향 자동 동기화 스크립트
 # 사용법: cron에 등록해서 10분마다 실행
 #   crontab -e
-#   */10 * * * * /path/to/hermes-wiki-super/sync.sh >> sync.log 2>&1
+#   */10 * * * * /ABSOLUTE/PATH/hermes-wiki-super/sync.sh >> /ABSOLUTE/PATH/hermes-wiki-super/sync.log 2>&1
+#   ※ ~/Documents/Obsidian Vault/처럼 띄어쓰기 있는 경로는 절대경로+큰따옴표로 감쌀 것
+#   ※ zsh에서 */10 glob 오류 → crontab -e로 직접 입력하거나 echo로 등록
 # ============================================================
 
 cd "$(dirname "$0")"

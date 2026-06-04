@@ -51,17 +51,21 @@ git submodule update --remote
 
 3. **cron 등록 (10분마다 자동 sync)**
    
-   > ⚠️ `*/10`을 터미널에 바로 치면 zsh가 glob 패턴으로 오해해서 `zsh: no matches found` 에러가 남. 아래 명령어 통째로 복붙하면 됨.
+   > ⚠️ 주의사항 두 가지:
+   > 1. `*/10`을 터미널에 바로 치면 zsh가 glob 패턴으로 오해함 — 아래 명령어를 **통째로 복붙**할 것
+   > 2. `~/Documents/Obsidian Vault/` 경로에 **띄어쓰기**가 있음 — crontab에서 인식 못 할 수 있으므로 **절대경로 + 큰따옴표**를 권장
    
    ```bash
-   # 등록 (zsh glob 문제 없음)
-   (crontab -l 2>/dev/null; echo "*/10 * * * * ~/Documents/Obsidian Vault/hermes-wiki-super/sync.sh >> ~/Documents/Obsidian Vault/hermes-wiki-super/sync.log 2>&1") | crontab -
+   # 등록 (절대경로 + 띄어쓰기 문제 해결)
+   (crontab -l 2>/dev/null; echo "*/10 * * * * /Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super/sync.sh >> /Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super/sync.log 2>&1") | crontab -
    
    # 확인
    crontab -l
    ```
    
    > 터미널에 **한 줄로** 복붙해서 실행하면 끝. vi/nano 안 열어도 됨.
+   
+   > ⏱️ `*/1`(1분)은 너무 잦음. sync.sh가 submodule을 전부 체크하므로 `*/10`(10분) 권장.
 
 4. **Obsidian Git 플러그인**
    - 설치: 커뮤니티 플러그인 → "Obsidian Git"
