@@ -1,0 +1,33 @@
+[submodule "wiki/hermes-wiki"]
+	path = wiki/hermes-wiki
+	url = https://github.com/mybotagent/hermes-wiki.git
+[submodule "wiki/hermes-wiki-portfolio"]
+	path = wiki/hermes-wiki-portfolio
+	url = https://github.com/mybotagent/hermes-wiki-portfolio.git
+[submodule "wiki/hermes-wiki-schedule"]
+	path = wiki/hermes-wiki-schedule
+	url = https://github.com/mybotagent/hermes-wiki-schedule.git
+[submodule "wiki/hermes-wiki-claude-code"]
+	path = wiki/hermes-wiki-claude-code
+	url = https://github.com/mybotagent/hermes-wiki-claude-code.git
+[submodule "wiki/hermes-wiki-codex"]
+	path = wiki/hermes-wiki-codex
+	url = https://github.com/mybotagent/hermes-wiki-codex.git
+[submodule "wiki/hermes-logs"]
+	path = wiki/hermes-logs
+	url = https://github.com/mybotagent/hermes-logs.git
+[submodule "code/stock-analysis-toolkit"]
+	path = code/stock-analysis-toolkit
+	url = https://github.com/mybotagent/stock-analysis-toolkit.git
+[submodule "wiki/subagents-library"]
+	path = wiki/subagents-library
+	url = https://github.com/mybotagent/subagents-library.git
+[submodule "wiki/harness-engineering-wiki"]
+	path = wiki/harness-engineering-wiki
+	url = https://github.com/mybotagent/harness-engineering-wiki.git
+[submodule "wiki/ai-job-analysis"]
+	path = wiki/ai-job-analysis
+	url = https://github.com/mybotagent/ai-job-analysis.git
+[submodule "wiki/hermes-slash-commands"]
+	path = wiki/hermes-slash-commands
+	url = https://github.com/mybotagent/hermes-slash-commands.git
