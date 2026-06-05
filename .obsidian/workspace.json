@@ -73,7 +73,7 @@
                   },
                   "pinned": true,
                   "icon": "terminal",
-                  "title": "Terminal: ✳ Claude Code"
+                  "title": "Terminal: ✳ Connect notebook LLM via MCP integration"
                 }
               }
             ]
