@@ -91,7 +91,6 @@ git submodule update --remote
 | 경로 | 레포 | 설명 |
 |:----|:----|:------|
 | `wiki/hermes-wiki` | hermes-wiki | 메인 위키 (INDEX repo) |
-| `wiki/hermes-wiki-portfolio` | hermes-wiki-portfolio | 포트폴리오/증시 분석 |
 | `wiki/hermes-wiki-schedule` | hermes-wiki-schedule | 일정/경제지표 |
 | `wiki/hermes-wiki-claude-code` | hermes-wiki-claude-code | Claude Code CLI |
 | `wiki/hermes-wiki-codex` | hermes-wiki-codex | Codex CLI |
