@@ -95,8 +95,7 @@ git submodule update --remote
 | `wiki/hermes-wiki-claude-code` | hermes-wiki-claude-code | Claude Code CLI |
 | `wiki/hermes-wiki-codex` | hermes-wiki-codex | Codex CLI |
 | `wiki/hermes-logs` | hermes-logs | 변경 로그 |
-| `code/stock-analysis-toolkit` | stock-analysis-toolkit | 주식 분석 스크립트 |
 | `wiki/subagents-library` | subagents-library | Sub-agent 카탈로그 |
 | `wiki/harness-engineering-wiki` | harness-engineering-wiki | Harness Engineering 강의 |
-| `wiki/ai-job-analysis` | ai-job-analysis | AI Agent 직업 분석 |
 | `wiki/hermes-slash-commands` | hermes-slash-commands | 슬래시 명령어 문서 |
+| `wiki/ai-job-analysis` | ai-job-analysis | AI Agent 직업 분석 |
