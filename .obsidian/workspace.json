@@ -49,7 +49,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ⠂ Connect notebook LLM via MCP integration"
+              "title": "Terminal: ⠐ Connect notebook LLM via MCP integration"
             }
           },
           {
@@ -251,7 +251,7 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4694cc25f0e34339",
+  "active": "c4a2a14f368e2f31",
   "lastOpenFiles": [
     "wiki/ai-job-analysis/job-postings-analysis.md",
     "ai-job-analysis/company-requirements.md",
