@@ -17,12 +17,12 @@
                 "state": {
                   "type": "markdown",
                   "state": {
-                    "file": "wiki/hermes-wiki/README.md",
+                    "file": "wiki/harness-engineering-wiki/context-management/context-rot.md",
                     "mode": "source",
                     "source": false
                   },
                   "icon": "lucide-file",
-                  "title": "README"
+                  "title": "context-rot"
                 }
               }
             ]
@@ -250,13 +250,13 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4694cc25f0e34339",
+  "active": "2ed00469fecd7603",
   "lastOpenFiles": [
+    "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/hermes-wiki/README.md",
     "sync.sh",
     "code/stock-analysis-toolkit/README.md",
     "wiki/ai-job-analysis/README.md",
-    "wiki/hermes-wiki/index.md",
-    "wiki/ai-job-analysis/job-postings-analysis.md"
+    "wiki/hermes-wiki/index.md"
   ]
 }
