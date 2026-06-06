@@ -228,26 +228,17 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "code/stock-analysis-toolkit/README.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline"
-            }
-          },
-          {
-            "id": "f3e1987c2ab8e351",
-            "type": "leaf",
-            "state": {
-              "type": "git-view",
-              "state": {},
-              "icon": "git-pull-request",
-              "title": "Source Control"
+              "title": "Outline of README"
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -266,7 +257,7 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "df7b0143f1fb1600",
+  "active": "c4a2a14f368e2f31",
   "lastOpenFiles": [
     "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/ai-job-analysis/README.md",
