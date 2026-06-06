@@ -80,11 +80,7 @@ git submodule update --remote
 | 아무 변화 없음 | → 조용히 종료 (로그만 남음) ✅ |
 | 충돌 발생 | → 드묾, 발생 시 수동 해결 |
 
-## 모바일 (iOS) — Working Copy
-
-1. Working Copy에서 `hermes-wiki-super` clone
-2. 서브모듈은 Working Copy에서 알아서 관리 가능
-3. 주기적으로 Pull
+---
 
 ## 포함된 레포
 
