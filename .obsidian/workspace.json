@@ -250,8 +250,9 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "2ed00469fecd7603",
+  "active": "4694cc25f0e34339",
   "lastOpenFiles": [
+    "wiki/harness-engineering-wiki/context-management/context-rot.md",
     "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/hermes-wiki/README.md",
     "sync.sh",
