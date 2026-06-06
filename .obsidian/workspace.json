@@ -94,7 +94,8 @@
               "title": "common-skills"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -265,15 +266,15 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4694cc25f0e34339",
+  "active": "7d48c4ac854c2793",
   "lastOpenFiles": [
+    "wiki/ai-job-analysis/job-postings-analysis.md",
+    "wiki/hermes-wiki/README.md",
     "wiki/ai-job-analysis/common-skills.md",
     "wiki/ai-job-analysis/company-requirements.md",
-    "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/ai-job-analysis/README.md",
     "ai-job-analysis/company-requirements.md",
     "ai-job-analysis/common-skills.md",
-    "wiki/hermes-wiki/README.md",
     "ai-job-analysis/README.md",
     "ai-job-analysis",
     "wiki/harness-engineering-wiki/README.md",
