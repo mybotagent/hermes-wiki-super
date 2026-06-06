@@ -268,10 +268,11 @@
   },
   "active": "df7b0143f1fb1600",
   "lastOpenFiles": [
-    "wiki/ai-job-analysis/job-postings-analysis.md",
-    "ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/common-skills.md",
+    "wiki/ai-job-analysis/job-postings-analysis.md",
+    "wiki/ai-job-analysis/README.md",
+    "ai-job-analysis/company-requirements.md",
     "ai-job-analysis/common-skills.md",
     "wiki/hermes-wiki/README.md",
     "ai-job-analysis/README.md",
@@ -280,7 +281,6 @@
     "wiki/harness-engineering-wiki/context-management/context-rot.md",
     "sync.sh",
     "code/stock-analysis-toolkit/README.md",
-    "wiki/ai-job-analysis/README.md",
     "wiki/hermes-wiki/index.md"
   ]
 }
