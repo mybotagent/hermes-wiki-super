@@ -80,7 +80,8 @@
               "title": "job-postings-analysis"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -251,13 +252,15 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4694cc25f0e34339",
+  "active": "4baf13f13ec87d59",
   "lastOpenFiles": [
+    "ai-job-analysis/company-requirements.md",
+    "wiki/ai-job-analysis/company-requirements.md",
+    "wiki/ai-job-analysis/common-skills.md",
+    "ai-job-analysis/common-skills.md",
     "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/hermes-wiki/README.md",
     "ai-job-analysis/README.md",
-    "ai-job-analysis/company-requirements.md",
-    "ai-job-analysis/common-skills.md",
     "ai-job-analysis",
     "wiki/harness-engineering-wiki/README.md",
     "wiki/harness-engineering-wiki/context-management/context-rot.md",
