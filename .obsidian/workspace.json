@@ -94,8 +94,7 @@
               "title": "common-skills"
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -266,10 +265,10 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "df7b0143f1fb1600",
+  "active": "4694cc25f0e34339",
   "lastOpenFiles": [
-    "wiki/ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/common-skills.md",
+    "wiki/ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/ai-job-analysis/README.md",
     "ai-job-analysis/company-requirements.md",
