@@ -49,7 +49,7 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: ✳ Connect notebook LLM via MCP integration"
+              "title": "Terminal: ⠂ Connect notebook LLM via MCP integration"
             }
           },
           {
@@ -80,8 +80,7 @@
               "title": "job-postings-analysis"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
@@ -252,13 +251,13 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "4baf13f13ec87d59",
+  "active": "4694cc25f0e34339",
   "lastOpenFiles": [
+    "wiki/ai-job-analysis/job-postings-analysis.md",
     "ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/company-requirements.md",
     "wiki/ai-job-analysis/common-skills.md",
     "ai-job-analysis/common-skills.md",
-    "wiki/ai-job-analysis/job-postings-analysis.md",
     "wiki/hermes-wiki/README.md",
     "ai-job-analysis/README.md",
     "ai-job-analysis",
