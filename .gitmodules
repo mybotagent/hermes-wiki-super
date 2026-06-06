@@ -16,9 +16,6 @@
 [submodule "wiki/hermes-logs"]
 	path = wiki/hermes-logs
 	url = https://github.com/mybotagent/hermes-logs.git
-[submodule "code/stock-analysis-toolkit"]
-	path = code/stock-analysis-toolkit
-	url = https://github.com/mybotagent/stock-analysis-toolkit.git
 [submodule "wiki/subagents-library"]
 	path = wiki/subagents-library
 	url = https://github.com/mybotagent/subagents-library.git
