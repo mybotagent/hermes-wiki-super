@@ -25,3 +25,6 @@
 [submodule "wiki/hermes-slash-commands"]
 	path = wiki/hermes-slash-commands
 	url = https://github.com/mybotagent/hermes-slash-commands.git
+[submodule "wiki/ai-marketing-wiki"]
+	path = wiki/ai-marketing-wiki
+	url = https://github.com/mybotagent/ai-marketing-wiki.git
