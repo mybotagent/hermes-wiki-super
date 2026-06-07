@@ -1,0 +1,22 @@
+# Obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/plugins/
+.obsidian/cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Sync conflicts
+*.sync-conflict-*
+
+# Personal / sensitive
+.env
+.env.local

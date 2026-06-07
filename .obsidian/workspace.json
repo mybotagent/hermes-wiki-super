@@ -49,13 +49,12 @@
               },
               "pinned": true,
               "icon": "terminal",
-              "title": "Terminal: zsh"
+              "title": "Terminal: ✳ Create wiki submodule management command"
             }
           },
           {
             "id": "5d0bd71e00f92800",
             "type": "leaf",
-            "pinned": true,
             "state": {
               "type": "terminal:terminal",
               "state": {
@@ -92,7 +91,6 @@
                   "userTitle": ""
                 }
               },
-              "pinned": true,
               "icon": "terminal",
               "title": "Terminal: sanghee@isanghuis-MacBook-Air:~/Documents/Obsidian Vault/hermes-wiki-super"
             }
@@ -124,9 +122,50 @@
               "icon": "lucide-file",
               "title": "job-postings-analysis"
             }
+          },
+          {
+            "id": "323cd74a90a77ff8",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
+          },
+          {
+            "id": "aa01921b3cfd898d",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "wiki/subagents-library/index.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "index"
+            }
+          },
+          {
+            "id": "a328a537eafe78b7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "wiki/ai-marketing-wiki/reference/tools.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "tools"
+            }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -286,21 +325,43 @@
       "terminal:Open terminal": false
     }
   },
-  "active": "5d0bd71e00f92800",
+  "active": "4694cc25f0e34339",
   "lastOpenFiles": [
-    "code/stock-analysis-toolkit/README.md",
-    "wiki/ai-job-analysis/job-postings-analysis.md",
-    "wiki/ai-job-analysis/README.md",
-    "wiki/ai-job-analysis/company-requirements.md",
-    "wiki/ai-job-analysis/common-skills.md",
-    "wiki/hermes-wiki/README.md",
-    "ai-job-analysis/company-requirements.md",
-    "ai-job-analysis/common-skills.md",
-    "ai-job-analysis/README.md",
-    "ai-job-analysis",
-    "wiki/harness-engineering-wiki/README.md",
-    "wiki/harness-engineering-wiki/context-management/context-rot.md",
-    "sync.sh",
-    "wiki/hermes-wiki/index.md"
+    "wiki/hermes-wiki/repos/hermes-wiki-super.md",
+    "wiki/hermes-wiki/analysis/pipeline-system-overview.md",
+    "wiki/hermes-wiki/analysis/langgraph-pipeline.md",
+    "wiki/hermes-wiki/infra/obsidian-github-sync-setup/gh-sync-all.sh",
+    "wiki/hermes-wiki/infra/obsidian-github-sync-setup",
+    "wiki/hermes-wiki-quant/log.md.tmp.77791.e707eab22fd2",
+    "wiki/hermes-wiki-quant/indicator-tier-map.md",
+    "wiki/hermes-wiki-quant/additional-indicators.md",
+    "wiki/ai-marketing-wiki/reference/tools.md",
+    "wiki/ai-marketing-wiki/reference/metrics.md",
+    "wiki/ai-marketing-wiki/reference/case-studies.md",
+    "wiki/ai-marketing-wiki/mcp/README.md",
+    "wiki/ai-marketing-wiki/mcp/implementation.md",
+    "wiki/ai-marketing-wiki/mcp/architecture.md",
+    "wiki/ai-marketing-wiki/agency/services.md",
+    "wiki/ai-marketing-wiki/agency/roadmap.md",
+    "wiki/ai-marketing-wiki/agency/README.md",
+    "wiki/hermes-wiki-quant/README.md",
+    "wiki/subagents-library/index.md",
+    "wiki/subagents-library/README.md",
+    "wiki/subagents-library/AGENTS.md",
+    "wiki/subagents-library/patterns/how-it-works.md",
+    "README.md",
+    "wiki/hermes-wiki-portfolio/README.md",
+    "wiki/hermes-wiki-portfolio/METHODOLOGY.md",
+    "wiki/hermes-wiki-portfolio/index.md",
+    "wiki/hermes-wiki/logs/2026/2026-05-31-2253.md",
+    "wiki/hermes-wiki-quant/log.md",
+    "wiki/hermes-wiki-quant/index.md",
+    "wiki/hermes-wiki-quant/inflation-indicators.md.tmp.77791.a2096ae04416",
+    "wiki/hermes-wiki-quant",
+    "wiki/ai-marketing-wiki/vibe-marketing",
+    "wiki/ai-marketing-wiki/search",
+    "wiki/ai-marketing-wiki/reference",
+    "wiki/ai-marketing-wiki/mcp",
+    "wiki/ai-marketing-wiki/agency"
   ]
 }
