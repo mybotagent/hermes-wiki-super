@@ -28,3 +28,6 @@
 [submodule "wiki/ai-marketing-wiki"]
 	path = wiki/ai-marketing-wiki
 	url = https://github.com/mybotagent/ai-marketing-wiki.git
+[submodule "wiki/hermes-wiki-quant"]
+	path = wiki/hermes-wiki-quant
+	url = https://github.com/mybotagent/hermes-wiki-quant.git
