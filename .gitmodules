@@ -31,3 +31,6 @@
 [submodule "wiki/hermes-wiki-quant"]
 	path = wiki/hermes-wiki-quant
 	url = https://github.com/mybotagent/hermes-wiki-quant.git
+[submodule "wiki/hermes-prompts"]
+	path = wiki/hermes-prompts
+	url = https://github.com/mybotagent/hermes-prompts.git
