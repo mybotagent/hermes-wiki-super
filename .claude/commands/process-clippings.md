@@ -16,7 +16,24 @@
 
 ## Claude가 수행할 단계
 
-### 0단계 — 처리 대상 파일 목록 확인
+### 0단계 — 계정 전환 (mybotagent) ← 필수, 생략 금지
+
+```bash
+# 현재 계정 백업
+ORIGINAL_ACCOUNT=$(gh auth status 2>&1 | awk '/Active account: true/{print $4; exit}')
+[ -z "$ORIGINAL_ACCOUNT" ] && ORIGINAL_ACCOUNT=$(gh auth status 2>&1 | awk '/Logged in/{print $4; exit}')
+echo "[process-clippings] 원래 계정 백업: $ORIGINAL_ACCOUNT"
+
+# mybotagent로 전환
+gh auth switch --hostname github.com --user mybotagent
+gh auth status --json active -q '.["github.com"].user.login' | grep -q '^mybotagent$' \
+  || { echo "[process-clippings] ERROR: mybotagent 전환 실패" >&2; exit 1; }
+echo "[process-clippings] mybotagent로 전환 완료"
+```
+
+> **주의**: 이 단계 없이 진행하면 push 시 401 에러 발생. 반드시 먼저 실행.
+
+### 1단계 — 처리 대상 파일 목록 확인
 
 ```bash
 SUPER_ROOT="/Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super"
@@ -29,7 +46,7 @@ ls "$SUPER_ROOT/Clippings/"
 
 ### 각 파일에 대해 아래 단계 반복
 
-#### 1단계 — 파일 읽기 및 주제 분석
+#### 2단계 — 파일 읽기 및 주제 분석
 
 파일의 frontmatter와 본문을 읽어 다음을 파악한다:
 - **title**: 제목
@@ -37,28 +54,26 @@ ls "$SUPER_ROOT/Clippings/"
 - **tags**: 기존 태그
 - **핵심 주제**: 어떤 분야에 속하는가
 
-#### 2단계 — 레포 결정 (add-wiki 기준)
+#### 3단계 — 레포 결정 (add-wiki 기준)
 
-현재 서브모듈 참고:
-- `hermes-wiki` — Hermes 메인 위키 (일반)
-- `hermes-wiki-claude-code` — Claude Code 관련
-- `hermes-wiki-codex` — Codex / 슬래시 커맨드
-- `hermes-wiki-schedule` — 스케줄/루틴
-- `harness-engineering-wiki` — 엔지니어링/개발
-- `ai-job-analysis` — AI 채용/직무 분석
-- `ai-marketing-wiki` — AI 마케팅
-- `hermes-logs` — 로그/기록
-- `hermes-slash-commands` — 슬래시 커맨드
-- `subagents-library` — 서브에이전트
-
-기존 서브모듈 목록을 먼저 확인:
+기존 서브모듈 목록 확인:
 ```bash
 cat "/Users/sanghee/Documents/Obsidian Vault/hermes-wiki-super/.gitmodules"
 ```
 
-결정 이유를 한 줄로 사용자에게 설명한다. 어디에도 맞지 않으면 새 레포 이름 결정(kebab-case).
+| 주제 | 서브모듈 |
+|------|---------|
+| Hermes Agent, AI 에이전트 일반 | `hermes-wiki` |
+| Claude Code, MCP, 슬래시 커맨드 | `hermes-wiki-claude-code` |
+| 엔지니어링, 개발, 아키텍처 | `harness-engineering-wiki` |
+| AI 마케팅, 콘텐츠 전략 | `ai-marketing-wiki` |
+| 서브에이전트, 멀티에이전트 | `subagents-library` |
+| Codex, 자동화 패턴 | `hermes-wiki-codex` |
+| 어디에도 없음 | 새 레포 생성 (kebab-case) |
 
-#### 3단계 — Karpathy 방식으로 위키 페이지 작성
+결정 이유를 한 줄로 사용자에게 설명한다.
+
+#### 4단계 — Karpathy 방식으로 위키 페이지 작성
 
 클리핑 원문에서 **고유 인사이트만 추출**하여 위키 페이지로 변환:
 
@@ -85,11 +100,11 @@ created: YYYY-MM-DD
 
 **품질 규칙:**
 - Unique insight only: 원문 요약이 아닌 핵심 인사이트 추출
-- Concise: 1~5KB, 핵심만 (클리핑 원문 길이에 관계없이)
+- Concise: 1~5KB (클리핑 원문 길이에 관계없이)
 - `[[wikilinks]]` 로 교차 참조
 - 파일명: kebab-case (예: `data-science-roadmap-2026.md`)
 
-#### 4단계 — index.md 및 log.md 업데이트
+#### 5단계 — index.md 및 log.md 업데이트
 
 레포 안의 `index.md`에 새 페이지 항목 추가:
 ```markdown
@@ -102,7 +117,7 @@ created: YYYY-MM-DD
 Clippings/<원본파일명> 에서 변환
 ```
 
-#### 5단계 — 위키 레포에 push
+#### 6단계 — 위키 레포에 push
 
 **기존 서브모듈인 경우:**
 ```bash
@@ -143,7 +158,7 @@ git commit -m "feat: add $WIKI_NAME as submodule"
 git push
 ```
 
-#### 6단계 — 처리 완료된 클리핑 아카이브
+#### 7단계 — 처리 완료된 클리핑 아카이브
 
 위키 push 성공 후 원본 클리핑 파일을 `Clippings/processed/` 폴더로 이동:
 ```bash
@@ -153,6 +168,21 @@ mv "$SUPER_ROOT/Clippings/<파일명>" "$SUPER_ROOT/Clippings/processed/"
 ```
 
 삭제하지 않고 `processed/` 폴더에 보관하여 원본을 보존한다.
+
+---
+
+### 마지막 단계 — 계정 복원 (반드시 실행)
+
+```bash
+if [ -n "$ORIGINAL_ACCOUNT" ] && [ "$ORIGINAL_ACCOUNT" != "mybotagent" ]; then
+  gh auth switch --hostname github.com --user "$ORIGINAL_ACCOUNT"
+  echo "[process-clippings] 계정 복원: $ORIGINAL_ACCOUNT"
+else
+  echo "[process-clippings] mybotagent가 원래 계정 → 복원 생략"
+fi
+```
+
+> **주의**: 성공/실패 관계없이 반드시 실행. 이 단계를 빠뜨리면 이후 작업이 mybotagent 계정으로 실행됨.
 
 ---
 
@@ -171,3 +201,5 @@ mv "$SUPER_ROOT/Clippings/<파일명>" "$SUPER_ROOT/Clippings/processed/"
 |------|------|------|
 | ... | ... | ✅/❌ |
 ```
+
+계정 복원 결과도 마지막에 표시한다.
