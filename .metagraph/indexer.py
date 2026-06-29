@@ -25,7 +25,10 @@ NAMESPACES = {
     "hermes-wiki": "hw", "trade-pipeline": "tp",
     "hermes-wiki-claude-code": "cc", "hermes-wiki-codex": "cx",
     "harness-engineering-wiki": "he", "subagents-library": "sl",
-    "hermes-logs": "hl",
+    "hermes-logs": "hl", "hermes-wiki-quant": "hq",
+    "ai-job-analysis": "aj", "ai-marketing-wiki": "am",
+    "hermes-prompts": "hp", "hermes-slash-commands": "hs",
+    "hermes-wiki-schedule": "hsd",
 }
 
 def get_repo_namespace(repo_name):
@@ -170,6 +173,14 @@ def main():
             for sub in item.iterdir():
                 if sub.is_dir() and ((sub / ".git").exists() or (sub / "index.md").exists()):
                     repos[sub.name] = sub
+
+    # Standalone repos outside wiki_super
+    standalone = {
+        "trade-pipeline": os.path.expanduser("~/trade-pipeline"),
+    }
+    for name, path in standalone.items():
+        if Path(path).exists():
+            repos[name] = Path(path)
 
     print(f"Found {len(repos)} repos")
     total_pages = total_links = total_refs = 0
