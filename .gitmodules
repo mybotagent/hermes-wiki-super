@@ -34,3 +34,6 @@
 [submodule "wiki/hermes-prompts"]
 	path = wiki/hermes-prompts
 	url = https://github.com/mybotagent/hermes-prompts.git
+[submodule "wiki/ai-agent-wiki"]
+	path = wiki/ai-agent-wiki
+	url = https://github.com/mybotagent/ai-agent-wiki.git
