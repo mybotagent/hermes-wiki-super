@@ -20,3 +20,4 @@ Thumbs.db
 # Personal / sensitive
 .env
 .env.local
+.metagraph/__pycache__/
