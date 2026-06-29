@@ -1,0 +1,49 @@
+{
+  "repos": {
+    "ai-job-analysis": {
+      "head": "f6ba64185087cf57f2bcae9e2da5c8e8765af686",
+      "indexed": 1782705868
+    },
+    "ai-marketing-wiki": {
+      "head": "251eee301df586818ac4424256b115c20bfa7b87",
+      "indexed": 1782705868
+    },
+    "harness-engineering-wiki": {
+      "head": "47894e74e9a3e5500b4716cd6bc0a725950ea1d9",
+      "indexed": 1782705868
+    },
+    "hermes-logs": {
+      "head": "734faeec2bb2dfcd1d2373be085e37bff519c9d5",
+      "indexed": 1782705868
+    },
+    "hermes-prompts": {
+      "head": "3db22e6b6cf44c0bd4dd44cc6a3c0fd0077e88fd",
+      "indexed": 1782705868
+    },
+    "hermes-slash-commands": {
+      "head": "c971ff9bb17046cc15a89ae1fbc8bd93f4002edf",
+      "indexed": 1782705868
+    },
+    "hermes-wiki": {
+      "head": "f07a8feb3c398d193f02585e10cdbea3ec7f337d",
+      "indexed": 1782705868
+    },
+    "hermes-wiki-claude-code": {
+      "head": "5a73bfd3df7a9648031b29b58e47f5df5c955858",
+      "indexed": 1782705868
+    },
+    "hermes-wiki-codex": {
+      "head": "1761e48f7900ee8109fb2106a6c612feefd03e31",
+      "indexed": 1782705868
+    },
+    "hermes-wiki-quant": {
+      "head": "a77dd35cd1312f36817661202c5b227ddfc211f1",
+      "indexed": 1782705868
+    },
+    "trade-pipeline": {
+      "head": "185d11cea2860bb25539f2c3e1a6ecd5bfab1270",
+      "indexed": 1782705868
+    }
+  },
+  "last_index": 1782705868
+}
