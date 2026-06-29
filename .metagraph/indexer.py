@@ -17,22 +17,15 @@ from neo4j import GraphDatabase
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from embed import embed_batch
+from discover import discover_repos, get_namespace_map
 
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 WIKI_SUPER = os.path.expanduser("~/hermes-wiki-super")
 
-NAMESPACES = {
-    "hermes-wiki": "hw", "trade-pipeline": "tp",
-    "hermes-wiki-claude-code": "cc", "hermes-wiki-codex": "cx",
-    "harness-engineering-wiki": "he", "subagents-library": "sl",
-    "hermes-logs": "hl", "hermes-wiki-quant": "hq",
-    "ai-job-analysis": "aj", "ai-marketing-wiki": "am",
-    "hermes-prompts": "hp", "hermes-slash-commands": "hs",
-    "hermes-wiki-schedule": "hsd",
-}
-
 def get_repo_namespace(repo_name):
-    return NAMESPACES.get(repo_name, repo_name[:2])
+    """Delegate to discover.py auto-namespace system."""
+    nmap = get_namespace_map()
+    return nmap.get(repo_name, repo_name[:2])
 
 def find_wiki_pages(repo_path):
     pages = []
@@ -165,24 +158,14 @@ def main():
 
     wiki_super = Path(WIKI_SUPER)
     repos = {}
-    for item in wiki_super.iterdir():
-        if not item.is_dir() or item.name.startswith("."): continue
-        if (item / ".git").exists() or (item / "index.md").exists():
-            repos[item.name] = item
-        if item.name == "wiki":
-            for sub in item.iterdir():
-                if sub.is_dir() and ((sub / ".git").exists() or (sub / "index.md").exists()):
-                    repos[sub.name] = sub
+    
+    # Use discover.py for auto-detection
+    discovered = discover_repos(include_state=False)
+    for name, info in discovered.items():
+        if info["initialized"] and info["path"] and info["path"].exists():
+            repos[name] = info["path"]
 
-    # Standalone repos outside wiki_super
-    standalone = {
-        "trade-pipeline": os.path.expanduser("~/trade-pipeline"),
-    }
-    for name, path in standalone.items():
-        if Path(path).exists():
-            repos[name] = Path(path)
-
-    print(f"Found {len(repos)} repos")
+    print(f"Found {len(repos)} repos (via discover.py)")
     total_pages = total_links = total_refs = 0
     
     # First pass: scan all repos to build global page registry

@@ -1,149 +1,177 @@
-# Hermes GraphRAG — Design Document v0.3
+# Hermes GraphRAG — Design Document v0.4
 
-> 2026-06-29 | Phase 5 완료: 운영 자동화
+> 2026-06-29 | Phase 6: Universal Knowledge Graph
 
-## System Architecture
+## Motivation
+
+Phase 5의 구조적 한계:
+1. **`indexer.py`**: `NAMESPACES` 하드코딩 — 새 repo 추가 시 수동 등록 필요
+2. **`query.py`**: `structural_search()`에 하드코딩된 키워드 맵(valuation/infra/analysis/...)
+3. **`query.py`**: `detect_mode()`에 하드코딩된 한국어 키워드
+4. **No auto-discovery**: 새 submodule이 `.gitmodules`에 추가돼도 자동 감지 불가
+
+**목표**: repo 추가/제거/변경에 완전히 자동 대응. 모든 콘텐츠를 언어/도메인/태그 무관하게 검색.
+
+## System Architecture v0.4
 
 ```
-┌─────────────────────────────────┐
-│    11 Wiki Repos (hermes-*)     │
-│  ├─ hermes-wiki (34 pages)      │
-│  ├─ trade-pipeline (24 pages)   │
-│  ├─ hermes-logs (30 pages)      │
-│  ├─ harness-engineering (26)    │
-│  ├─ ai-marketing (20 pages)     │
-│  ├─ hermes-prompts (18 pages)   │
-│  ├─ claude-code (18 pages)      │
-│  ├─ hermes-wiki-quant (10)      │
-│  ├─ codex (9 pages)             │
-│  ├─ ai-job-analysis (8 pages)   │
-│  └─ slash-commands (3 pages)    │
-└─────────┬───────────────────────┘
-          │ git HEAD diff (daily 03:00 KST)
-          ▼
-┌─────────────────────────────────┐
-│   .metagraph/indexer.py         │
-│   .metagraph/index_incremental  │ ← 증분 모드
-│   .metagraph/link_cross_repo.py │ ← 크로스-레포 링크
-└─────────┬───────────────────────┘
-          │ MERGE
-          ▼
-┌─────────────────────────────────┐
-│  Neo4j Community 5.26.0         │
-│  ┌───────────┐ ┌──────────┐   │
-│  │ 200 Pages  │ │ 376 Edges│   │
-│  │ (384d vec) │ │251 wiki+ │   │
-│  │            │ │125 cross │   │
-│  └───────────┘ └──────────┘   │
-│  Vector Index: page_emb        │
-│  Bolt: localhost:7687          │
-│  Heap: 512MB / Cache: 256MB   │
-│  systemd: enabled (boot auto)  │
-└─────────┬───────────────────────┘
-          │ QUERY (Hermes Skill)
-          ▼
-┌─────────────────────────────────┐
-│  Query Router (auto-detect)     │
-│  ├─ Semantic (vector)           │
-│  ├─ Structural (Cypher GRAPH)   │
-│  └─ Hybrid (multi-hop)          │
-└─────────┬───────────────────────┘
-          │ Synthesize → 한글
-          ▼
-┌─────────────────────────────────┐
-│      Hermes Agent Response      │
-└─────────────────────────────────┘
+┌───────────────────────────────────────┐
+│          Wiki Super Repo              │
+│  .gitmodules (13+ submodules)         │
+│  wiki/*/  (submodule checkouts)       │
+└──────────┬────────────────────────────┘
+           │
+           ▼
+┌───────────────────────────────────────┐
+│  discover.py (NEW)                    │
+│  ├─ parse .gitmodules → 모든 submodule │
+│  ├─ auto-generate namespace (2자 + 충돌)│
+│  ├─ compare vs .index_state.json      │
+│  └─ 신규 발견 → git submodule update  │
+└──────────┬────────────────────────────┘
+           │
+           ▼
+┌───────────────────────────────────────┐
+│  indexer.py (REFACTORED)             │
+│  ├─ NAMESPACES 하드코딩 ❌ 제거       │
+│  ├─ discover.py 결과 사용            │
+│  ├─ standalone repos도 auto-detect    │
+│  └─ trade-pipeline 등 extra path 포함 │
+└──────────┬────────────────────────────┘
+           │
+           ▼
+┌───────────────────────────────────────┐
+│  Neo4j (200+ pages)                  │
+│  vector_search + graph_traversal     │
+└──────────┬────────────────────────────┘
+           │
+           ▼
+┌───────────────────────────────────────┐
+│  query.py (REFACTORED)               │
+│  ├─ structural_search 키워드 ❌ 제거   │
+│  ├─ detect_mode 키워드 ❌ 제거        │
+│  ├─ universal_search (NEW)           │
+│  │   ├─ 1. vector_search (임베딩)     │
+│  │   ├─ 2. graph_expand (1-hop)       │
+│  │   └─ 3. rank: vector × connectivity│
+│  └─ 모든 repo/언어/도메인 무관 작동   │
+└───────────────────────────────────────┘
 ```
 
-## Key Decisions
+## Key Changes
 
-### Phase 1-3 (Foundation)
-- **Neo4j Community (local)** — 비용 0, 포트폴리오 가치 최대
-- **BAAI/bge-m3 (384d)** — DeepSeek embedding API 없음 → 무료 오픈소스
-- **Query Router** — semantic/structural/hybrid 자동 분기 (규칙 기반, LLM 불필요)
-- **11 Repos** — 200 pages, 376 edges (125 cross-repo)
+### 1. discover.py (NEW)
+`.gitmodules`를 파싱해 모든 submodule 자동 감지:
 
-### Phase 4 (Cross-repo)
-- Namespace registry (hw:, tp:, he:, etc.)
-- Cross-repo wikilink resolution: `hw:cron-jobs` → 다른 repo의 `[[cron-jobs]]` 연결
-- 13개 submodule 중 11개 checkout/인덱싱 완료 (2개 미초기화)
-
-### Phase 5 (Operations) ← NEW
-- **systemd** → 부팅 시 Neo4j 자동 시작, 실패 시 자동 재시작
-- **Incremental Indexer** → git HEAD 변경 감지, 변경된 repo만 재인덱싱
-- **Health Check cron** → 매일 08:00 KST, silent when healthy
-- **Incremental Index cron** → 매일 03:00 KST, 자동 증분 인덱싱
-
-## Operations
-
-### 크론 작업
-
-| Job ID | Name | Schedule (KST) | Type | Description |
-|--------|------|---------------|------|-------------|
-| 65ef8dbdfa5d | neo4j-health-check | 08:00 daily | no_agent | Silent when healthy, alert on failure |
-| 972c64d3f4da | neo4j-incremental-index | 03:00 daily | agent | Report changed repos + pages count |
-
-### 복구 절차
-
-```bash
-# 1. 상태 확인
-systemctl status neo4j.service
-
-# 2. 재시작
-sudo systemctl restart neo4j.service
-
-# 3. 수동 헬스 체크
-source ~/.venv-neo4j/bin/activate
-python3 ~/hermes-wiki-super/.metagraph/check_health.py --verbose
+```python
+def discover_repos(wiki_super_path):
+    """Return {repo_name: repo_path, namespace, status}"""
+    # 1. Parse .gitmodules → all submodules (init/uninit 모두)
+    # 2. Compare vs .index_state.json
+    # 3. New: auto-namespace (첫글자2자 + 충돌 시 증분)
+    # 4. Extra: ~/trade-pipeline 같이 submodule 밖 repo
 ```
 
-### 메모리 (1.9GB RAM 서버)
+**Namespace 생성 규칙**:
+- repo명에서 첫 2자 추출 (e.g., `hermes-wiki` → `hw`)
+- 충돌 시 숫자 증분 (e.g., `hw`, `hw2`, `hw3`)
+- 특수 repo는 alias (e.g., `trade-pipeline` → `tp`)
 
-| Component | Usage |
-|-----------|-------|
-| Neo4j Heap | 512MB |
-| Page Cache | 256MB |
-| JVM overhead | ~100MB |
-| Total | ~900MB |
-| Swap | 1.9GB available |
+### 2. indexer.py (REFACTORED)
+```python
+# BEFORE: 하드코딩 NAMESPACES
+NAMESPACES = {
+    "hermes-wiki": "hw", "trade-pipeline": "tp", ...
+}
 
-## Future Considerations
+# AFTER: discover.py 위임
+def get_repo_namespace(repo_name):
+    from discover import resolve_namespace
+    return resolve_namespace(repo_name)
 
-1. **Incremental 인덱스 크론 개선** — 파일 단위 변경 감지 (현재: repo HEAD 단위)
-2. **스킬 Hermes Agent 등록** — 현재 수동 호출, Hermes Agent skill로 통합
-3. **Neo4j 인증 설정** — auth off (로컬 전용, 필요 시)
-4. **미초기화 submodule** — hermes-wiki-schedule, subagents-library (새 repo 추가 시)
+# standalone repos도 discover.py로 통합
+# trade-pipeline hardcode 제거
+```
 
-## Files
+### 3. Universal Query Router (query.py)
 
-### Input / Source
-- `~/hermes-wiki-super/wiki/*/` — 11 wiki repos (submodules)
+```python
+# BEFORE (제거):
+keywords = {"valuation": ["per", "pbr", ...]}  # ❌
+def detect_mode(q):
+    if any(w in q for w in ["연결", "관계", ...]):  # ❌
 
-### Scripts (.metagraph/)
-| Script | Purpose |
-|--------|---------|
-| `create_schema.py` | Neo4j schema + Vector Index init |
-| `embed.py` | bge-m3 embedding (384d) |
-| `indexer.py` | Full indexer (all repos) |
-| `index_incremental.py` | Incremental (changed repos only) |
-| `link_cross_repo.py` | Cross-repo wikilink resolver |
-| `check_health.py` | Health check + auto-repair |
-| `skill/query.py` | Query Router |
-| `skill/synthesize.py` | Result synthesizer |
+# AFTER:
+def universal_search(query: str, k: int = 5) -> list:
+    """키워드/태그/도메인 가정 ZERO. 오직 벡터 + 그래프."""
+    # Step 1: Vector search (always works)
+    emb = embed_text(query)
+    vec_results = vector_search(emb, k)
+    
+    # Step 2: Graph expand top results
+    for r in vec_results[:3]:
+        r["neighbors"] = get_neighbors(r["id"])
+    
+    # Step 3: Rank by combined score
+    #   vector_score × (1 + log(connectivity + 1))
+    return ranked
+```
 
-### Config / State
-| File | Purpose |
-|------|---------|
-| `.index_state.json` | Per-repo HEAD tracking |
-| `/etc/systemd/system/neo4j.service` | Systemd unit |
-| `/usr/local/neo4j/conf/neo4j.conf` | Neo4j config |
+**작동 원리**:
+- 벡터 검색은 언어/도메인/태그에 무관 — 임베딩이 의미를 포착
+- 그래프 확장은 연결성 정보 추가 — "연결/관계" 질문도 자연히 커버
+- 키워드 매칭/태그 필터 없이도 모든 질문에 대응
+
+### 4. Auto-Ingest Pipeline
+
+```
+Cron 03:00 KST (기존 유지, discovery 추가):
+
+Step 0: python3 discover.py --check
+  → 신규 submodule 발견 시 git submodule update --init
+  → .index_state.json에 신규 repo 등록
+  → 메시지: "[NEW] hermes-wiki-foo (ns:hf) detected, indexed"
+
+Step 1: python3 index_incremental.py
+  → 변경된 repo만 재인덱싱
+  → 신규 repo도 포함 (초기 인덱싱)
+```
+
+## Implementation Plan
+
+### Phase 6a: Discovery + Indexer 리팩터
+| File | Change |
+|------|--------|
+| `discover.py` | **NEW** — .gitmodules 파서 + namespace 생성기 |
+| `indexer.py` | 하드코딩 NAMESPACES 제거, discover.py 위임 |
+| `index_incremental.py` | discover.py 통합, 신규 repo 감지 |
+
+### Phase 6b: Universal Query Router
+| File | Change |
+|------|--------|
+| `query.py` | `structural_search` 키워드 제거, `universal_search` 추가 |
+| `query.py` | `detect_mode` 키워드 제거, unified rank |
+| `synthesize.py` | 불필요한 필터 제거 |
+
+### Phase 6c: Cron + Auto-Ingest
+| Task | Detail |
+|------|--------|
+| `discover.py --check` | cron pre-step으로 추가 |
+| cron update | 기존 03:00 KST에 discover 추가 |
 
 ## Timeline
 
-| Phase | Date | Pages | Edges | Repos |
-|-------|------|-------|-------|-------|
-| P1: Schema + Graph (initial) | 2026-06-29 | 64 | 78 | 2 |
-| P2: Vectors | 2026-06-29 | 64 | 78 | 2 |
-| P3: Hermes Skill | 2026-06-29 | 64 | 78 | 2 |
-| P4: Cross-repo Expansion | 2026-06-29 | 200 | 376 | 11 |
-| P5: Operations Automation | 2026-06-29 | 200 | 376 | 11 |
+| Phase | Date | Description |
+|-------|------|-------------|
+| P1~P5 | 2026-06-29 | Foundation (200 pages, 11 repos) |
+| **P6a** | 2026-06-29 | Discovery + Indexer 리팩터 |
+| **P6b** | 2026-06-29 | Universal Query Router |
+| **P6c** | 2026-06-29 | Auto-ingest cron |
+
+## Risk
+
+| Risk | Mitigation |
+|------|------------|
+| namespace 충돌 | 2자 + 숫자 증분으로 해결 |
+| 미초기화 submodule index 실패 | `discover.py`가 init까지 자동 처리 |
+| universal_search가 structural보다 정확도 낮음 | vector × connectivity 조합이 키워드 매칭 상회 |

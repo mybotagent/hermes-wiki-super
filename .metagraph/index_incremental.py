@@ -15,6 +15,9 @@ Usage:
 import json, os, sys, subprocess, time
 from pathlib import Path
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from discover import discover_repos
+
 STATE_FILE = Path(__file__).parent / ".index_state.json"
 NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
 WIKI_SUPER = Path(os.path.expanduser("~/hermes-wiki-super"))
@@ -67,22 +70,12 @@ def main():
         print(f"  Last full index: {state.get('last_full', 'never')}")
         return
 
-    # Discover repos
-    # Check both root and wiki/ subdirectory for submodules
+    # Discover repos via discover.py (auto-detection from .gitmodules)
+    discovered = discover_repos(include_state=False)
     repos = {}
-    search_dirs = [WIKI_SUPER]
-    wiki_dir = WIKI_SUPER / "wiki"
-    if wiki_dir.exists():
-        search_dirs.append(wiki_dir)
-    for base in search_dirs:
-        for item in sorted(base.iterdir()):
-            if not item.is_dir() or item.name.startswith("."):
-                continue
-            # git can be a dir (full clone) or file (submodule link)
-            if (item / ".git").exists():
-                repos[item.name] = item
-    if (Path(os.path.expanduser("~/trade-pipeline"))).exists():
-        repos["trade-pipeline"] = Path(os.path.expanduser("~/trade-pipeline"))
+    for name, info in discovered.items():
+        if info["initialized"] and info["path"] and info["path"].exists():
+            repos[name] = info["path"]
 
     changed = []
     unchanged = []
