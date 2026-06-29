@@ -184,10 +184,21 @@ def main():
 
     print(f"Found {len(repos)} repos")
     total_pages = total_links = total_refs = 0
+    
+    # First pass: scan all repos to build global page registry
+    all_page_ids = set()
+    for repo_name, repo_path in sorted(repos.items()):
+        if args.repo and repo_name != args.repo: continue
+        p, l, r = scan_repo(repo_name, repo_path, True)  # dry run first
+        for page in p:
+            all_page_ids.add(page["id"])
+        total_pages += len(p); total_links += len(l); total_refs += len(r)
+    
+    # Second pass: real write with cross-repo wikilink resolution
+    print(f"\n--- Second pass: writing to Neo4j with cross-repo links ---")
     for repo_name, repo_path in sorted(repos.items()):
         if args.repo and repo_name != args.repo: continue
         p, l, r = scan_repo(repo_name, repo_path, args.dry_run)
-        total_pages += len(p); total_links += len(l); total_refs += len(r)
 
     print(f"\n=== Summary ===")
     print(f"  Pages: {total_pages}, Links: {total_links}, Refs: {total_refs}")
