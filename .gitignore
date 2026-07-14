@@ -1,8 +1,23 @@
 # Obsidian
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
+.obsidian/app.json
+.obsidian/appearance.json
+.obsidian/community-plugins.json
+.obsidian/core-plugins.json
+.obsidian/graph.json
 .obsidian/plugins/
 .obsidian/cache
+
+# Claude Code personal settings
+.claude/
+.claude/commands/
+.claude/hooks/
+.claude/settings.json
+
+# Clippings — 외부 콘텐츠 큐레이션 (저작권 리스크 + 개인)
+Clippings/
+Clippings/processed/
 
 # OS
 .DS_Store
