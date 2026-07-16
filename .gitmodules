@@ -19,9 +19,6 @@
 [submodule "wiki/harness-engineering-wiki"]
 	path = wiki/harness-engineering-wiki
 	url = https://github.com/mybotagent/harness-engineering-wiki.git
-[submodule "wiki/ai-job-analysis"]
-	path = wiki/ai-job-analysis
-	url = https://github.com/mybotagent/ai-job-analysis.git
 [submodule "wiki/hermes-slash-commands"]
 	path = wiki/hermes-slash-commands
 	url = https://github.com/mybotagent/hermes-slash-commands.git
