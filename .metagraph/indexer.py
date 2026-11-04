@@ -152,9 +152,10 @@ def write_to_neo4j(pages, links, refs):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--repo", help="Scan single repo only")
+    parser.add_argument("--repo", action="append", default=[], help="Scan single repo only (repeatable)")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
+    target_repos = set(args.repo) if args.repo else None
 
     wiki_super = Path(WIKI_SUPER)
     repos = {}
@@ -171,7 +172,7 @@ def main():
     # First pass: scan all repos to build global page registry
     all_page_ids = set()
     for repo_name, repo_path in sorted(repos.items()):
-        if args.repo and repo_name != args.repo: continue
+        if target_repos and repo_name not in target_repos: continue
         p, l, r = scan_repo(repo_name, repo_path, True)  # dry run first
         for page in p:
             all_page_ids.add(page["id"])
@@ -180,7 +181,7 @@ def main():
     # Second pass: real write with cross-repo wikilink resolution
     print(f"\n--- Second pass: writing to Neo4j with cross-repo links ---")
     for repo_name, repo_path in sorted(repos.items()):
-        if args.repo and repo_name != args.repo: continue
+        if target_repos and repo_name not in target_repos: continue
         p, l, r = scan_repo(repo_name, repo_path, args.dry_run)
 
     print(f"\n=== Summary ===")
