@@ -94,4 +94,7 @@ git submodule update --remote
 | `wiki/subagents-library` | subagents-library | Sub-agent 카탈로그 |
 | `wiki/harness-engineering-wiki` | harness-engineering-wiki | Harness Engineering 강의 |
 | `wiki/hermes-slash-commands` | hermes-slash-commands | 슬래시 명령어 문서 |
-| `wiki/ai-job-analysis` | ai-job-analysis | AI Agent 직업 분석 |
+| `wiki/ai-agent-wiki` | ai-agent-wiki | AI Agent 위키 |
+| `wiki/ai-marketing-wiki` | ai-marketing-wiki | AI 마케팅 위키 |
+| `wiki/hermes-prompts` | hermes-prompts | 프롬프트 모음 |
+| `wiki/hermes-wiki-quant` | hermes-wiki-quant | 퀀트/매크로 |
