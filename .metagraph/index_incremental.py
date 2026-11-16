@@ -41,6 +41,74 @@ def get_git_head(path):
     except (subprocess.TimeoutExpired, FileNotFoundError):
         return None, None
 
+def git_cmd(path, args, timeout=30):
+    """Run a git command in `path`. Returns (returncode, stdout) or (None, '')."""
+    try:
+        r = subprocess.run(
+            ["git"] + args,
+            cwd=str(path), capture_output=True, text=True, timeout=timeout
+        )
+        return r.returncode, r.stdout.strip()
+    except (subprocess.TimeoutExpired, subprocess.CalledProcessError, FileNotFoundError):
+        return None, ""
+
+
+def fetch_and_sync(path, apply=True):
+    """
+    Fetch origin and fast-forward the repo to its upstream branch if it is behind.
+
+    Rationale (2026-11-17): index_incremental.py only compared the local HEAD SHA,
+    so a submodule that lagged behind origin/main was reported as "unchanged" and
+    silently skipped. This step removes that false negative.
+
+    Returns (status, detail) where status is one of:
+      up-to-date | fast-forwarded | behind | detached | no-upstream | error
+    """
+    rc, _ = git_cmd(path, ["rev-parse", "--is-inside-work-tree"], timeout=15)
+    if rc != 0:
+        return "error", "not a git repo"
+
+    # Determine upstream: prefer the branch origin/HEAD points to.
+    rc, out = git_cmd(path, ["symbolic-ref", "--quiet", "--short", "HEAD"], timeout=15)
+    branch = out if rc == 0 else ""
+    rc, out = git_cmd(path, ["rev-parse", "--abbrev-ref", "HEAD"], timeout=15)
+    if rc != 0 or out.startswith("HEAD"):
+        branch = ""
+
+    if not branch:
+        # Detached HEAD (e.g. submodules checked out by a recorded SHA):
+        # try origin/HEAD as the canonical branch.
+        rc, out = git_cmd(path, ["symbolic-ref", "--quiet", "--short", "refs/remotes/origin/HEAD"], timeout=15)
+        branch = out if rc == 0 else ""
+        if branch.startswith("origin/"):
+            branch = branch[len("origin/"):]
+        if not branch:
+            rc, out = git_cmd(path, ["remote", "show", "origin"], timeout=30)
+            for line in out.splitlines():
+                if line.strip().startswith("HEAD branch:"):
+                    branch = line.split(":", 1)[1].strip()
+                    break
+        if not branch:
+            return "detached", "detached HEAD and no origin/HEAD"
+
+    git_cmd(path, ["fetch", "origin", "--quiet"], timeout=60)
+
+    rc, out = git_cmd(path, ["rev-list", "--count", f"HEAD..origin/{branch}"], timeout=15)
+    if rc != 0:
+        return "no-upstream", f"cannot compare with origin/{branch}"
+    behind = int(out or 0)
+    if behind == 0:
+        return "up-to-date", branch
+
+    if not apply:
+        return "behind", f"{behind} commit(s) behind origin/{branch}"
+
+    rc, out = git_cmd(path, ["merge", "--ff-only", f"origin/{branch}"], timeout=60)
+    if rc != 0:
+        return "behind", f"{behind} behind origin/{branch}, ff-only merge failed"
+    return "fast-forwarded", f"{behind} commit(s) -> origin/{branch}"
+
+
 def load_state():
     if STATE_FILE.exists():
         return json.loads(STATE_FILE.read_text())
@@ -55,6 +123,8 @@ def main():
     parser.add_argument("--force", action="store_true", help="Full reindex all repos")
     parser.add_argument("--status", action="store_true", help="Show current state")
     parser.add_argument("--dry-run", action="store_true", help="Show what would change")
+    parser.add_argument("--no-fetch", action="store_true",
+                        help="Skip origin fetch / fast-forward sync of submodules")
     args = parser.parse_args()
 
     state = load_state()
@@ -79,7 +149,16 @@ def main():
 
     changed = []
     unchanged = []
+    synced = []
     for name, path in sorted(repos.items()):
+        # Sync with origin first so a lagging submodule is not falsely "unchanged".
+        if not args.no_fetch:
+            sync_status, sync_detail = fetch_and_sync(path, apply=True)
+            if sync_status == "fast-forwarded":
+                synced.append((name, sync_detail))
+                print(f"  {name:35s} SYNCED     {sync_detail}")
+            elif sync_status in ("behind", "detached", "no-upstream", "error"):
+                print(f"  {name:35s} WARN       {sync_status}: {sync_detail}")
         head_sha, head_ts = get_git_head(path)
         prev_sha = state.get("repos", {}).get(name, {}).get("head")
         status = "CHANGED" if (head_sha and head_sha != prev_sha) else "unchanged"
@@ -88,6 +167,10 @@ def main():
         else:
             unchanged.append(name)
         print(f"  {name:35s} {status}  head={head_sha[:12] if head_sha else 'N/A'}")
+
+    if synced:
+        print(f"\n  Synced {len(synced)} repo(s) with origin: "
+              + ", ".join(n for n, _ in synced))
 
     if not changed:
         print(f"\nAll {len(repos)} repos unchanged. Nothing to index.")
