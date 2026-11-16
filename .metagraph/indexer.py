@@ -33,7 +33,7 @@ def find_wiki_pages(repo_path):
         rel = f.relative_to(repo_path)
         parts = rel.parts
         if any(p.startswith(".") for p in parts): continue
-        if parts[0] in ("logs", "raw", ".git", "subagents-library"): continue
+        if parts[0] in ("logs", "raw", ".git", "subagents-library", "venv", "node_modules"): continue
         pages.append(f)
     return pages
 
