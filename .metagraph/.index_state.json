@@ -2,57 +2,57 @@
   "repos": {
     "ai-marketing-wiki": {
       "head": "251eee301df586818ac4424256b115c20bfa7b87",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "harness-engineering-wiki": {
       "head": "b6af15cf8e17e0fbf2bc5c81ff6f962ef513711c",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-logs": {
-      "head": "0f27ec766dbfd8dd23be63298735362eddfc1914",
-      "indexed": 1794852156
+      "head": "5efa8c54e7aeb591288c54a049506e68c535247c",
+      "indexed": 1794866488
     },
     "hermes-prompts": {
       "head": "3db22e6b6cf44c0bd4dd44cc6a3c0fd0077e88fd",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-slash-commands": {
       "head": "c971ff9bb17046cc15a89ae1fbc8bd93f4002edf",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-wiki": {
-      "head": "d398c73e16925c14b64b15b1990bfc7c9e6a9692",
-      "indexed": 1794852156
+      "head": "82e7e5434f57a19c1f6e570c2584cd5d8961ede0",
+      "indexed": 1794866488
     },
     "hermes-wiki-claude-code": {
       "head": "5a73bfd3df7a9648031b29b58e47f5df5c955858",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-wiki-codex": {
       "head": "1761e48f7900ee8109fb2106a6c612feefd03e31",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-wiki-quant": {
       "head": "a77dd35cd1312f36817661202c5b227ddfc211f1",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "trade-pipeline": {
       "head": "b86dec8509671ae881877adb2c204a52cc6ce50f",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "ai-agent-wiki": {
       "head": "042759bc1a02682116ecfd0cc8a8d3de3b5db2a2",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "hermes-wiki-schedule": {
       "head": "a7ae0c306d1e0026ace8d6775b56eb693d6eda15",
-      "indexed": 1794852156
+      "indexed": 1794866488
     },
     "subagents-library": {
       "head": "a2a634d5cb0c9021a57f64b08afe670440bccef2",
-      "indexed": 1794852156
+      "indexed": 1794866488
     }
   },
-  "last_index": 1794852156,
+  "last_index": 1794866488,
   "last_full": 1783000121
 }
